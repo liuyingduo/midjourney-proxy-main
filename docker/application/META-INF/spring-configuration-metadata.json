@@ -1,0 +1,239 @@
+{
+  "groups": [
+    {
+      "name": "mj",
+      "type": "com.github.novicezk.midjourney.ProxyProperties",
+      "sourceType": "com.github.novicezk.midjourney.ProxyProperties"
+    },
+    {
+      "name": "mj.baidu-translate",
+      "type": "com.github.novicezk.midjourney.ProxyProperties$BaiduTranslateConfig",
+      "sourceType": "com.github.novicezk.midjourney.ProxyProperties"
+    },
+    {
+      "name": "mj.discord",
+      "type": "com.github.novicezk.midjourney.ProxyProperties$DiscordAccountConfig",
+      "sourceType": "com.github.novicezk.midjourney.ProxyProperties"
+    },
+    {
+      "name": "mj.ng-discord",
+      "type": "com.github.novicezk.midjourney.ProxyProperties$NgDiscordConfig",
+      "sourceType": "com.github.novicezk.midjourney.ProxyProperties"
+    },
+    {
+      "name": "mj.openai",
+      "type": "com.github.novicezk.midjourney.ProxyProperties$OpenaiConfig",
+      "sourceType": "com.github.novicezk.midjourney.ProxyProperties"
+    },
+    {
+      "name": "mj.proxy",
+      "type": "com.github.novicezk.midjourney.ProxyProperties$ProxyConfig",
+      "sourceType": "com.github.novicezk.midjourney.ProxyProperties"
+    },
+    {
+      "name": "mj.task-store",
+      "type": "com.github.novicezk.midjourney.ProxyProperties$TaskStore",
+      "sourceType": "com.github.novicezk.midjourney.ProxyProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "mj.account-choose-rule",
+      "type": "java.lang.String",
+      "description": "discord账号选择规则.",
+      "sourceType": "com.github.novicezk.midjourney.ProxyProperties",
+      "defaultValue": "BestWaitIdleRule"
+    },
+    {
+      "name": "mj.accounts",
+      "type": "java.util.List<com.github.novicezk.midjourney.ProxyProperties$DiscordAccountConfig>",
+      "description": "discord账号池配置.",
+      "sourceType": "com.github.novicezk.midjourney.ProxyProperties"
+    },
+    {
+      "name": "mj.api-secret",
+      "type": "java.lang.String",
+      "description": "接口密钥，为空不启用鉴权；调用接口时需要加请求头 mj-api-secret.",
+      "sourceType": "com.github.novicezk.midjourney.ProxyProperties"
+    },
+    {
+      "name": "mj.baidu-translate.app-secret",
+      "type": "java.lang.String",
+      "description": "百度翻译的密钥.",
+      "sourceType": "com.github.novicezk.midjourney.ProxyProperties$BaiduTranslateConfig"
+    },
+    {
+      "name": "mj.baidu-translate.appid",
+      "type": "java.lang.String",
+      "description": "百度翻译的APP_ID.",
+      "sourceType": "com.github.novicezk.midjourney.ProxyProperties$BaiduTranslateConfig"
+    },
+    {
+      "name": "mj.discord.channel-id",
+      "type": "java.lang.String",
+      "description": "频道ID.",
+      "sourceType": "com.github.novicezk.midjourney.ProxyProperties$DiscordAccountConfig"
+    },
+    {
+      "name": "mj.discord.core-size",
+      "type": "java.lang.Integer",
+      "description": "并发数.",
+      "sourceType": "com.github.novicezk.midjourney.ProxyProperties$DiscordAccountConfig",
+      "defaultValue": 3
+    },
+    {
+      "name": "mj.discord.enable",
+      "type": "java.lang.Boolean",
+      "description": "是否可用.",
+      "sourceType": "com.github.novicezk.midjourney.ProxyProperties$DiscordAccountConfig",
+      "defaultValue": true
+    },
+    {
+      "name": "mj.discord.guild-id",
+      "type": "java.lang.String",
+      "description": "服务器ID.",
+      "sourceType": "com.github.novicezk.midjourney.ProxyProperties$DiscordAccountConfig"
+    },
+    {
+      "name": "mj.discord.queue-size",
+      "type": "java.lang.Integer",
+      "description": "等待队列长度.",
+      "sourceType": "com.github.novicezk.midjourney.ProxyProperties$DiscordAccountConfig",
+      "defaultValue": 10
+    },
+    {
+      "name": "mj.discord.timeout-minutes",
+      "type": "java.lang.Integer",
+      "description": "任务超时时间(分钟).",
+      "sourceType": "com.github.novicezk.midjourney.ProxyProperties$DiscordAccountConfig",
+      "defaultValue": 5
+    },
+    {
+      "name": "mj.discord.user-agent",
+      "type": "java.lang.String",
+      "description": "用户UserAgent.",
+      "sourceType": "com.github.novicezk.midjourney.ProxyProperties$DiscordAccountConfig"
+    },
+    {
+      "name": "mj.discord.user-token",
+      "type": "java.lang.String",
+      "description": "用户Token.",
+      "sourceType": "com.github.novicezk.midjourney.ProxyProperties$DiscordAccountConfig"
+    },
+    {
+      "name": "mj.ng-discord.cdn",
+      "type": "java.lang.String",
+      "description": "https:\/\/cdn.discordapp.com 反代.",
+      "sourceType": "com.github.novicezk.midjourney.ProxyProperties$NgDiscordConfig"
+    },
+    {
+      "name": "mj.ng-discord.resume-wss",
+      "type": "java.lang.String",
+      "description": "wss:\/\/gateway-us-east1-b.discord.gg 反代.",
+      "sourceType": "com.github.novicezk.midjourney.ProxyProperties$NgDiscordConfig"
+    },
+    {
+      "name": "mj.ng-discord.server",
+      "type": "java.lang.String",
+      "description": "https:\/\/discord.com 反代.",
+      "sourceType": "com.github.novicezk.midjourney.ProxyProperties$NgDiscordConfig"
+    },
+    {
+      "name": "mj.ng-discord.upload-server",
+      "type": "java.lang.String",
+      "description": "https:\/\/discord-attachments-uploads-prd.storage.googleapis.com 反代.",
+      "sourceType": "com.github.novicezk.midjourney.ProxyProperties$NgDiscordConfig"
+    },
+    {
+      "name": "mj.ng-discord.wss",
+      "type": "java.lang.String",
+      "description": "wss:\/\/gateway.discord.gg 反代.",
+      "sourceType": "com.github.novicezk.midjourney.ProxyProperties$NgDiscordConfig"
+    },
+    {
+      "name": "mj.notify-hook",
+      "type": "java.lang.String",
+      "description": "任务状态变更回调地址.",
+      "sourceType": "com.github.novicezk.midjourney.ProxyProperties"
+    },
+    {
+      "name": "mj.notify-pool-size",
+      "type": "java.lang.Integer",
+      "description": "通知回调线程池大小.",
+      "sourceType": "com.github.novicezk.midjourney.ProxyProperties",
+      "defaultValue": 10
+    },
+    {
+      "name": "mj.openai.gpt-api-key",
+      "type": "java.lang.String",
+      "description": "gpt的api-key.",
+      "sourceType": "com.github.novicezk.midjourney.ProxyProperties$OpenaiConfig"
+    },
+    {
+      "name": "mj.openai.gpt-api-url",
+      "type": "java.lang.String",
+      "description": "自定义gpt的api-url.",
+      "sourceType": "com.github.novicezk.midjourney.ProxyProperties$OpenaiConfig"
+    },
+    {
+      "name": "mj.openai.max-tokens",
+      "type": "java.lang.Integer",
+      "description": "返回结果的最大分词数.",
+      "sourceType": "com.github.novicezk.midjourney.ProxyProperties$OpenaiConfig",
+      "defaultValue": 2048
+    },
+    {
+      "name": "mj.openai.model",
+      "type": "java.lang.String",
+      "description": "使用的模型.",
+      "sourceType": "com.github.novicezk.midjourney.ProxyProperties$OpenaiConfig",
+      "defaultValue": "gpt-3.5-turbo"
+    },
+    {
+      "name": "mj.openai.temperature",
+      "type": "java.lang.Double",
+      "description": "相似度，取值 0-2.",
+      "sourceType": "com.github.novicezk.midjourney.ProxyProperties$OpenaiConfig",
+      "defaultValue": 0
+    },
+    {
+      "name": "mj.openai.timeout",
+      "type": "java.time.Duration",
+      "description": "超时时间.",
+      "sourceType": "com.github.novicezk.midjourney.ProxyProperties$OpenaiConfig",
+      "defaultValue": "30s"
+    },
+    {
+      "name": "mj.proxy.host",
+      "type": "java.lang.String",
+      "description": "代理host.",
+      "sourceType": "com.github.novicezk.midjourney.ProxyProperties$ProxyConfig"
+    },
+    {
+      "name": "mj.proxy.port",
+      "type": "java.lang.Integer",
+      "description": "代理端口.",
+      "sourceType": "com.github.novicezk.midjourney.ProxyProperties$ProxyConfig"
+    },
+    {
+      "name": "mj.task-store.timeout",
+      "type": "java.time.Duration",
+      "description": "任务过期时间，默认30天.",
+      "sourceType": "com.github.novicezk.midjourney.ProxyProperties$TaskStore",
+      "defaultValue": "30d"
+    },
+    {
+      "name": "mj.task-store.type",
+      "type": "com.github.novicezk.midjourney.ProxyProperties$TaskStore$Type",
+      "description": "任务存储方式: redis(默认)、in_memory.",
+      "sourceType": "com.github.novicezk.midjourney.ProxyProperties$TaskStore"
+    },
+    {
+      "name": "mj.translate-way",
+      "type": "com.github.novicezk.midjourney.enums.TranslateWay",
+      "description": "中文prompt翻译方式.",
+      "sourceType": "com.github.novicezk.midjourney.ProxyProperties"
+    }
+  ],
+  "hints": []
+}
