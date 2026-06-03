@@ -196,6 +196,11 @@ public class DiscordInstanceImpl implements DiscordInstance {
 	}
 
 	@Override
+	public Message<Void> component(String messageId, String customId, int messageFlags, String nonce) {
+		return this.service.component(messageId, customId, messageFlags, nonce);
+	}
+
+	@Override
 	public Message<Void> describe(String finalFileName, String nonce) {
 		return this.service.describe(finalFileName, nonce);
 	}

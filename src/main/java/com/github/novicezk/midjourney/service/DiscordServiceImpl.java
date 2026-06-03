@@ -86,6 +86,15 @@ public class DiscordServiceImpl implements DiscordService {
 	}
 
 	@Override
+	public Message<Void> component(String messageId, String customId, int messageFlags, String nonce) {
+		String paramsStr = replaceInteractionParams(this.paramsMap.get("component"), nonce)
+				.replace("$message_id", messageId);
+		JSONObject params = new JSONObject(paramsStr).put("message_flags", messageFlags);
+		params.getJSONObject("data").put("custom_id", customId);
+		return postJsonAndCheckStatus(params.toString());
+	}
+
+	@Override
 	public Message<Void> describe(String finalFileName, String nonce) {
 		String fileName = CharSequenceUtil.subAfter(finalFileName, "/", true);
 		String paramsStr = replaceInteractionParams(this.paramsMap.get("describe"), nonce)

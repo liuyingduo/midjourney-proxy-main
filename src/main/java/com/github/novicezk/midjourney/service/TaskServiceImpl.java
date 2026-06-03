@@ -58,32 +58,39 @@ public class TaskServiceImpl implements TaskService {
 
 	@Override
 	public SubmitResultVO submitUpscale(Task task, String targetMessageId, String targetMessageHash, int index, int messageFlags) {
-		String instanceId = task.getPropertyGeneric(Constants.TASK_PROPERTY_DISCORD_INSTANCE_ID);
-		DiscordInstance discordInstance = this.discordLoadBalancer.getDiscordInstance(instanceId);
-		if (discordInstance == null || !discordInstance.isAlive()) {
-			return SubmitResultVO.fail(ReturnCode.NOT_FOUND, "账号不可用: " + instanceId);
+		DiscordInstance discordInstance = getAliveDiscordInstance(task);
+		if (discordInstance == null) {
+			return unavailableAccountResult(task);
 		}
 		return discordInstance.submitTask(task, () -> discordInstance.upscale(targetMessageId, index, targetMessageHash, messageFlags, task.getPropertyGeneric(Constants.TASK_PROPERTY_NONCE)));
 	}
 
 	@Override
 	public SubmitResultVO submitVariation(Task task, String targetMessageId, String targetMessageHash, int index, int messageFlags) {
-		String instanceId = task.getPropertyGeneric(Constants.TASK_PROPERTY_DISCORD_INSTANCE_ID);
-		DiscordInstance discordInstance = this.discordLoadBalancer.getDiscordInstance(instanceId);
-		if (discordInstance == null || !discordInstance.isAlive()) {
-			return SubmitResultVO.fail(ReturnCode.NOT_FOUND, "账号不可用: " + instanceId);
+		DiscordInstance discordInstance = getAliveDiscordInstance(task);
+		if (discordInstance == null) {
+			return unavailableAccountResult(task);
 		}
 		return discordInstance.submitTask(task, () -> discordInstance.variation(targetMessageId, index, targetMessageHash, messageFlags, task.getPropertyGeneric(Constants.TASK_PROPERTY_NONCE)));
 	}
 
 	@Override
 	public SubmitResultVO submitReroll(Task task, String targetMessageId, String targetMessageHash, int messageFlags) {
-		String instanceId = task.getPropertyGeneric(Constants.TASK_PROPERTY_DISCORD_INSTANCE_ID);
-		DiscordInstance discordInstance = this.discordLoadBalancer.getDiscordInstance(instanceId);
-		if (discordInstance == null || !discordInstance.isAlive()) {
-			return SubmitResultVO.fail(ReturnCode.NOT_FOUND, "账号不可用: " + instanceId);
+		DiscordInstance discordInstance = getAliveDiscordInstance(task);
+		if (discordInstance == null) {
+			return unavailableAccountResult(task);
 		}
 		return discordInstance.submitTask(task, () -> discordInstance.reroll(targetMessageId, targetMessageHash, messageFlags, task.getPropertyGeneric(Constants.TASK_PROPERTY_NONCE)));
+	}
+
+	@Override
+	public SubmitResultVO submitComponent(Task task, String targetMessageId, String customId, int messageFlags) {
+		DiscordInstance discordInstance = getAliveDiscordInstance(task);
+		if (discordInstance == null) {
+			return unavailableAccountResult(task);
+		}
+		return discordInstance.submitTask(task,
+				() -> discordInstance.component(targetMessageId, customId, messageFlags, task.getPropertyGeneric(Constants.TASK_PROPERTY_NONCE)));
 	}
 
 	@Override
@@ -123,6 +130,17 @@ public class TaskServiceImpl implements TaskService {
 			}
 			return discordInstance.blend(finalFileNames, dimensions, task.getPropertyGeneric(Constants.TASK_PROPERTY_NONCE));
 		});
+	}
+
+	private DiscordInstance getAliveDiscordInstance(Task task) {
+		String instanceId = task.getPropertyGeneric(Constants.TASK_PROPERTY_DISCORD_INSTANCE_ID);
+		DiscordInstance discordInstance = this.discordLoadBalancer.getDiscordInstance(instanceId);
+		return discordInstance != null && discordInstance.isAlive() ? discordInstance : null;
+	}
+
+	private SubmitResultVO unavailableAccountResult(Task task) {
+		String instanceId = task.getPropertyGeneric(Constants.TASK_PROPERTY_DISCORD_INSTANCE_ID);
+		return SubmitResultVO.fail(ReturnCode.NOT_FOUND, "账号不可用: " + instanceId);
 	}
 
 }

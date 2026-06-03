@@ -15,11 +15,14 @@ public class SubmitChangeDTO extends BaseSubmitDTO {
 	@ApiModelProperty(value = "任务ID", required = true, example = "\"1320098173412546\"")
 	private String taskId;
 
-	@ApiModelProperty(value = "UPSCALE(放大); VARIATION(变换); REROLL(重新生成)", required = true,
-			allowableValues = "UPSCALE, VARIATION, REROLL", example = "UPSCALE")
+	@ApiModelProperty(value = "UPSCALE(放大); VARIATION(变换); REROLL(重新生成); INPUT(Discord按钮交互)", required = true,
+			allowableValues = "UPSCALE, VARIATION, REROLL, INPUT", example = "UPSCALE")
 	private TaskAction action;
 
 	@ApiModelProperty(value = "序号(1~4), action为UPSCALE,VARIATION时必传", allowableValues = "range[1, 4]", example = "1")
 	private Integer index;
+
+	@ApiModelProperty(value = "Discord组件custom_id, action为INPUT时必传", example = "MJ::JOB::upsample::1::xxx")
+	private String customId;
 
 }

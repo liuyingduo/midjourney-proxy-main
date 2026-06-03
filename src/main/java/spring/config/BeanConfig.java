@@ -28,6 +28,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.time.Duration;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -81,7 +82,9 @@ public class BeanConfig {
 
 	@Bean
 	List<MessageHandler> messageHandlers() {
-		return this.applicationContext.getBeansOfType(MessageHandler.class).values().stream().toList();
+		return this.applicationContext.getBeansOfType(MessageHandler.class).values().stream()
+				.sorted(Comparator.comparing(MessageHandler::order))
+				.toList();
 	}
 
 	@Bean

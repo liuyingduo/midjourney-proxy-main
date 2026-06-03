@@ -15,6 +15,7 @@ public final class Constants {
 	public static final String TASK_PROPERTY_DISCORD_INSTANCE_ID = "discordInstanceId";
 	public static final String TASK_PROPERTY_REFERENCED_MESSAGE_ID = "referencedMessageId";
 	public static final String TASK_PROPERTY_COMPONENTS = "components";
+	public static final String TASK_PROPERTY_CUSTOM_ID = "customId";
 	// 任务扩展属性 end
 
 	public static final String API_SECRET_HEADER_NAME = "mj-api-secret";

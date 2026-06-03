@@ -19,6 +19,10 @@ public enum TaskAction {
 	 */
 	REROLL,
 	/**
+	 * Discord按钮交互.
+	 */
+	INPUT,
+	/**
 	 * 图转prompt.
 	 */
 	DESCRIBE,

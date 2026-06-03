@@ -17,6 +17,8 @@ public interface TaskService {
 
 	SubmitResultVO submitReroll(Task task, String targetMessageId, String targetMessageHash, int messageFlags);
 
+	SubmitResultVO submitComponent(Task task, String targetMessageId, String customId, int messageFlags);
+
 	SubmitResultVO submitDescribe(Task task, DataUrl dataUrl);
 
 	SubmitResultVO submitBlend(Task task, List<DataUrl> dataUrls, BlendDimensions dimensions);

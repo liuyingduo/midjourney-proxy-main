@@ -21,6 +21,7 @@ import com.github.novicezk.midjourney.service.TaskStoreService;
 import com.github.novicezk.midjourney.service.TranslateService;
 import com.github.novicezk.midjourney.support.Task;
 import com.github.novicezk.midjourney.util.BannedPromptUtils;
+import com.github.novicezk.midjourney.util.ComponentUtils;
 import com.github.novicezk.midjourney.util.ConvertUtils;
 import com.github.novicezk.midjourney.util.MimeTypeUtils;
 import com.github.novicezk.midjourney.util.SnowFlake;
@@ -109,8 +110,18 @@ public class SubmitController {
 		if (CharSequenceUtil.isBlank(changeDTO.getTaskId())) {
 			return SubmitResultVO.fail(ReturnCode.VALIDATION_ERROR, "taskId不能为空");
 		}
+		if (TaskAction.INPUT.equals(changeDTO.getAction())
+				|| (changeDTO.getAction() == null && CharSequenceUtil.isNotBlank(changeDTO.getCustomId()))) {
+			return submitComponentChange(changeDTO);
+		}
+		if (CharSequenceUtil.isNotBlank(changeDTO.getCustomId())) {
+			return SubmitResultVO.fail(ReturnCode.VALIDATION_ERROR, "customId仅支持action=INPUT");
+		}
 		if (!Set.of(TaskAction.UPSCALE, TaskAction.VARIATION, TaskAction.REROLL).contains(changeDTO.getAction())) {
 			return SubmitResultVO.fail(ReturnCode.VALIDATION_ERROR, "action参数错误");
+		}
+		if (!TaskAction.REROLL.equals(changeDTO.getAction()) && !isValidChangeIndex(changeDTO.getIndex())) {
+			return SubmitResultVO.fail(ReturnCode.VALIDATION_ERROR, "index参数错误");
 		}
 		String description = "/up " + changeDTO.getTaskId();
 		if (TaskAction.REROLL.equals(changeDTO.getAction())) {
@@ -130,11 +141,7 @@ public class SubmitController {
 		}
 		Task task = newTask(changeDTO);
 		task.setAction(changeDTO.getAction());
-		task.setPrompt(targetTask.getPrompt());
-		task.setPromptEn(targetTask.getPromptEn());
-		task.setProperty(Constants.TASK_PROPERTY_FINAL_PROMPT, targetTask.getProperty(Constants.TASK_PROPERTY_FINAL_PROMPT));
-		task.setProperty(Constants.TASK_PROPERTY_PROGRESS_MESSAGE_ID, targetTask.getProperty(Constants.TASK_PROPERTY_MESSAGE_ID));
-		task.setProperty(Constants.TASK_PROPERTY_DISCORD_INSTANCE_ID, targetTask.getProperty(Constants.TASK_PROPERTY_DISCORD_INSTANCE_ID));
+		copyChangeTaskProperties(task, targetTask);
 		task.setDescription(description);
 		int messageFlags = targetTask.getPropertyGeneric(Constants.TASK_PROPERTY_FLAGS);
 		String messageId = targetTask.getPropertyGeneric(Constants.TASK_PROPERTY_MESSAGE_ID);
@@ -147,6 +154,44 @@ public class SubmitController {
 		} else {
 			return this.taskService.submitReroll(task, messageId, messageHash, messageFlags);
 		}
+	}
+
+	private SubmitResultVO submitComponentChange(SubmitChangeDTO changeDTO) {
+		if (CharSequenceUtil.isBlank(changeDTO.getCustomId())) {
+			return SubmitResultVO.fail(ReturnCode.VALIDATION_ERROR, "customId不能为空");
+		}
+		Task targetTask = this.taskStoreService.get(changeDTO.getTaskId());
+		if (targetTask == null) {
+			return SubmitResultVO.fail(ReturnCode.NOT_FOUND, "关联任务不存在或已失效");
+		}
+		if (!TaskStatus.SUCCESS.equals(targetTask.getStatus())) {
+			return SubmitResultVO.fail(ReturnCode.VALIDATION_ERROR, "关联任务状态错误");
+		}
+		if (!ComponentUtils.containsCustomId(targetTask.getProperty(Constants.TASK_PROPERTY_COMPONENTS), changeDTO.getCustomId())) {
+			return SubmitResultVO.fail(ReturnCode.VALIDATION_ERROR, "customId不属于关联任务");
+		}
+		Task task = newTask(changeDTO);
+		task.setAction(TaskAction.INPUT);
+		copyChangeTaskProperties(task, targetTask);
+		task.removeProperty(Constants.TASK_PROPERTY_PROGRESS_MESSAGE_ID);
+		task.setProperty(Constants.TASK_PROPERTY_CUSTOM_ID, changeDTO.getCustomId());
+		task.setDescription("/component " + changeDTO.getTaskId() + " " + changeDTO.getCustomId());
+		int messageFlags = targetTask.getPropertyGeneric(Constants.TASK_PROPERTY_FLAGS);
+		String messageId = targetTask.getPropertyGeneric(Constants.TASK_PROPERTY_MESSAGE_ID);
+		task.setProperty(Constants.TASK_PROPERTY_REFERENCED_MESSAGE_ID, messageId);
+		return this.taskService.submitComponent(task, messageId, changeDTO.getCustomId(), messageFlags);
+	}
+
+	private void copyChangeTaskProperties(Task task, Task targetTask) {
+		task.setPrompt(targetTask.getPrompt());
+		task.setPromptEn(targetTask.getPromptEn());
+		task.setProperty(Constants.TASK_PROPERTY_FINAL_PROMPT, targetTask.getProperty(Constants.TASK_PROPERTY_FINAL_PROMPT));
+		task.setProperty(Constants.TASK_PROPERTY_PROGRESS_MESSAGE_ID, targetTask.getProperty(Constants.TASK_PROPERTY_MESSAGE_ID));
+		task.setProperty(Constants.TASK_PROPERTY_DISCORD_INSTANCE_ID, targetTask.getProperty(Constants.TASK_PROPERTY_DISCORD_INSTANCE_ID));
+	}
+
+	private boolean isValidChangeIndex(Integer index) {
+		return index != null && index >= 1 && index <= 4;
 	}
 
 	@ApiOperation(value = "提交Describe任务")

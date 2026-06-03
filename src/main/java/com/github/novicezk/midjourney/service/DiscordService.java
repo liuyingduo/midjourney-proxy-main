@@ -17,6 +17,8 @@ public interface DiscordService {
 
 	Message<Void> reroll(String messageId, String messageHash, int messageFlags, String nonce);
 
+	Message<Void> component(String messageId, String customId, int messageFlags, String nonce);
+
 	Message<Void> describe(String finalFileName, String nonce);
 
 	Message<Void> blend(List<String> finalFileNames, BlendDimensions dimensions, String nonce);
