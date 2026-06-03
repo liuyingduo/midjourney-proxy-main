@@ -84,6 +84,9 @@ public abstract class MessageHandler {
 		task.setProperty(Constants.TASK_PROPERTY_MESSAGE_ID, message.getString("id"));
 		task.setProperty(Constants.TASK_PROPERTY_FLAGS, message.getInt("flags", 0));
 		task.setProperty(Constants.TASK_PROPERTY_MESSAGE_HASH, this.discordHelper.getMessageHash(task.getImageUrl()));
+		if (message.hasKey("components")) {
+			task.setProperty(Constants.TASK_PROPERTY_COMPONENTS, message.getArray("components").toList());
+		}
 		task.success();
 	}
 

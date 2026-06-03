@@ -19,7 +19,7 @@ WORKDIR $SPRING_HOME
 
 COPY . .
 
-RUN mvn clean package \
+RUN mvn clean package -s settings.xml \
     && mv target/midjourney-proxy-*.jar ./app.jar \
     && rm -rf target
 
